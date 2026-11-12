@@ -387,9 +387,23 @@ button {
     transform: scale(0.8);
   }
 
-  .hero-content {
-    width: 100%;
-  }
+ 
+.hero-content {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  position: relative;
+  z-index: 4;
+}
+
+.hero h1 {
+  width: 100%;
+  max-width: 100%;
+  font-size: 32px;
+  line-height: 1.4;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
 
   .hero h1 {
     font-size: 36px;
@@ -566,5 +580,147 @@ button {
   .logo-image {
     width: 36px;
     height: 36px;
+  }
+}
+
+
+/* ==============================
+   MOBILE RESPONSIVE IMPROVEMENT
+   모바일 화면 최적화
+================================ */
+
+@media (max-width: 650px) {
+
+  /* 상단 헤더 */
+  .header {
+    min-height: 65px;
+    padding: 12px 5%;
+    gap: 10px;
+  }
+
+  .logo {
+    font-size: 17px;
+    gap: 7px;
+  }
+
+  .logo-image {
+    width: 32px;
+    height: 32px;
+  }
+
+  .nav {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 20px;
+    padding: 10px 0 4px;
+  }
+
+  .nav a {
+    font-size: 11px;
+  }
+
+  /* 메인 히어로 영역 */
+  .hero {
+    min-height: auto;
+    padding: 55px 7% 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .hero-content {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .hero h1 {
+    font-size: clamp(27px, 7.5vw, 34px);
+    line-height: 1.45;
+    letter-spacing: -1.5px;
+    word-break: keep-all;
+    overflow-wrap: normal;
+  }
+
+  .hero-content p {
+    font-size: 13px;
+    line-height: 1.9;
+    word-break: keep-all;
+  }
+
+  .hero-button {
+    padding: 13px 18px;
+    gap: 20px;
+  }
+
+  /* 캐릭터를 문구 아래 중앙에 배치 */
+  .hero-decoration {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    align-self: center;
+    width: 260px;
+    height: 300px;
+    flex: 0 0 300px;
+    opacity: 1;
+    transform: scale(0.85);
+    margin-top: -10px;
+  }
+
+  .hero-character {
+    width: 190px;
+    height: 285px;
+  }
+
+  .hero-caption {
+    bottom: 0;
+  }
+
+  /* 메뉴 영역 */
+  .welcome {
+    padding: 55px 6%;
+  }
+
+  .welcome h2 {
+    font-size: 25px;
+    word-break: keep-all;
+  }
+
+  .menu-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .menu-card {
+    min-height: 185px;
+    padding: 22px;
+  }
+
+  /* 커뮤니티 영역 */
+  .community-banner {
+    margin: 0 5% 45px;
+    padding: 40px 18px;
+  }
+
+  .community-banner h2 {
+    font-size: 21px;
+    line-height: 1.6;
+    word-break: keep-all;
+  }
+}
+
+/* 작은 휴대폰 */
+@media (max-width: 380px) {
+  .hero h1 {
+    font-size: 27px;
+  }
+
+  .nav {
+    gap: 15px;
+  }
+
+  .nav a {
+    font-size: 10px;
   }
 }
