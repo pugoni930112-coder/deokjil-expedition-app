@@ -1,0 +1,456 @@
+
+.records-page {
+  min-height: 100vh;
+  background: #090a10;
+  color: #fff;
+}
+
+.records-hero {
+  min-height: 250px;
+  padding: 65px 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background:
+    radial-gradient(ellipse at 80% 40%, #25282d 0%, transparent 55%),
+    linear-gradient(120deg, #111316, #090a10);
+  border-bottom: 1px solid #30303b;
+}
+
+.records-hero h1 {
+  margin: 18px 0;
+  font-size: clamp(32px, 5vw, 48px);
+  letter-spacing: -2px;
+}
+
+.records-hero p {
+  color: #b8b8c4;
+  line-height: 1.9;
+  font-size: 14px;
+}
+
+.records-hero-decoration {
+  width: 260px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+  color: #c7cbd1;
+  font-size: 50px;
+}
+
+.records-hero-decoration span:last-child {
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: #aaaabb;
+}
+
+.records-content {
+  padding: 30px 5% 90px;
+  max-width: 1500px;
+  margin: auto;
+}
+
+.records-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #30303b;
+}
+
+.record-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.record-filter,
+.record-add-button {
+  padding: 11px 19px;
+  border: 1px solid #555565;
+  border-radius: 30px;
+  color: #ddd;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.record-filter.active {
+  color: #101214;
+  background: #c7cbd1;
+  border-color: #c7cbd1;
+  font-weight: 700;
+}
+
+.record-add-button {
+  color: #101214;
+  background: #c7cbd1;
+  border-color: #c7cbd1;
+  font-weight: 700;
+}
+
+.records-list-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 25px 0;
+  color: #ddd;
+  font-size: 14px;
+}
+
+.records-sort {
+  padding: 9px 15px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #bbb;
+}
+
+.records-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.record-card {
+  overflow: hidden;
+  border: 1px solid #393943;
+  border-radius: 13px;
+  background: #15151d;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.record-card:hover {
+  transform: translateY(-5px);
+  border-color: #a99acb;
+}
+
+.record-image-placeholder {
+  height: 190px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #30343a, #191c20);
+  color: #dce0e5;
+  font-size: 45px;
+  position: relative;
+}
+
+.image-1 {
+  background: linear-gradient(135deg, #383d44, #191c20);
+}
+
+.image-2 {
+  background: linear-gradient(135deg, #30353b, #191c20);
+}
+
+.record-image-placeholder small {
+  font-size: 12px;
+  color: #ddd;
+  letter-spacing: 2px;
+}
+
+.record-card-content {
+  padding: 17px;
+}
+
+.record-category {
+  color: #c7cbd1;
+  font-size: 11px;
+}
+
+.record-card h3 {
+  margin: 9px 0 4px;
+  font-size: 17px;
+}
+
+.record-subtitle {
+  color: #888899;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.record-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 15px 0;
+  color: #aaaabb;
+  font-size: 11px;
+}
+
+.record-card-content > p {
+  min-height: 42px;
+  color: #ccc;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.record-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 13px;
+  border-top: 1px solid #353540;
+  color: #c7cbd1;
+  font-size: 12px;
+}
+
+@media (max-width: 850px) {
+  .records-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 550px) {
+  .records-hero {
+    padding: 45px 6%;
+  }
+
+  .records-hero-decoration {
+    display: none;
+  }
+
+  .records-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .records-toolbar {
+    align-items: flex-start;
+  }
+}
+
+
+
+/* ==============================
+   RECORD MODAL - BLACK & SILVER
+================================ */
+
+.record-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(8px);
+  overflow-y: auto;
+}
+
+.record-modal {
+  width: 100%;
+  max-width: 620px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px;
+  color: #fff;
+  background: #151719;
+  border: 1px solid #62676e;
+  border-radius: 12px;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.7);
+}
+
+.record-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.record-modal-header h2 {
+  margin: 12px 0;
+  font-size: 25px;
+  color: #f4f4f4;
+}
+
+.record-modal-close {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #666;
+  border-radius: 50%;
+  background: transparent;
+  color: #ddd;
+  font-size: 23px;
+  cursor: pointer;
+}
+
+.record-modal-description {
+  color: #aaa;
+  font-size: 13px;
+  margin: 8px 0 22px;
+}
+
+.record-modal-placeholder {
+  min-height: 145px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px dashed #777f88;
+  border-radius: 8px;
+  background: #1d2023;
+  color: #d0d4d9;
+}
+
+.record-modal-placeholder span {
+  font-size: 32px;
+}
+
+.record-modal-placeholder p {
+  margin: 8px 0 4px;
+  font-size: 14px;
+}
+
+.record-modal-placeholder small {
+  color: #888;
+  font-size: 11px;
+}
+
+.record-modal-label {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-bottom: 18px;
+  color: #d7dbe0;
+  font-size: 13px;
+}
+
+.record-modal-label input,
+.record-modal-label select,
+.record-modal-label textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #494e54;
+  border-radius: 6px;
+  outline: none;
+  color: #fff;
+  background: #202327;
+  font: inherit;
+  font-size: 13px;
+}
+
+.record-modal-label input:focus,
+.record-modal-label select:focus,
+.record-modal-label textarea:focus {
+  border-color: #c7cbd1;
+}
+
+.record-modal-label select option {
+  background: #202327;
+  color: #fff;
+}
+
+.record-modal-label textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.record-modal-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.record-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.record-cancel-button,
+.record-save-button {
+  padding: 12px 22px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.record-cancel-button {
+  color: #ddd;
+  background: transparent;
+  border: 1px solid #666;
+}
+
+.record-save-button {
+  color: #111;
+  background: linear-gradient(135deg, #fff, #aeb5bd);
+  border: 1px solid #cbd0d6;
+}
+
+@media (max-width: 550px) {
+  .record-modal {
+    padding: 22px 18px;
+  }
+
+  .record-modal-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+
+/* PHOTO UPLOAD */
+.record-photo-label {
+  width: 100%;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-align: center;
+}
+
+.record-photo-label > span {
+  font-size: 34px;
+  color: #dce0e5;
+}
+
+.record-photo-label p {
+  margin: 8px 0;
+  color: #ddd;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.record-photo-label small {
+  color: #888;
+  font-size: 11px;
+}
+
+.record-photo-preview {
+  display: block;
+  width: 100%;
+  max-height: 280px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.record-photo-change {
+  display: block;
+  margin: 10px auto 0;
+  padding: 8px 15px;
+  color: #e1e4e8;
+  background: #292d32;
+  border: 1px solid #737a82;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.record-card-image {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+}
