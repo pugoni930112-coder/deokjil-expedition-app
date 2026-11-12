@@ -40,14 +40,14 @@ function SubPage({
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <div className="app">
         {/* HEADER */}
         <header className="header">
           <Link className="logo" to="/">
             <img
               className="logo-image"
-              src="/penguin-logo.png"
+              src={`${import.meta.env.BASE_URL}penguin-logo.png`}
               alt="덕질 원정대 펭귄 로고"
             />
             <span>덕질 원정대</span>

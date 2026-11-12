@@ -34,11 +34,11 @@ function Home() {
           <span className="sparkle sparkle-two">✧</span>
           <span className="sparkle sparkle-three">✦</span>
 
-          <img
-            className="hero-character"
-            src="/hero-character.png"
-            alt="마이크를 들고 무대에 선 캐릭터"
-          />
+         <img
+  className="hero-character"
+  src={`${import.meta.env.BASE_URL}hero-character.png`}
+  alt="마이크를 들고 무대에 선 캐릭터"
+/>
 
           <span className="hero-caption">
             OUR DEAREST MOMENTS
