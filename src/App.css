@@ -34,7 +34,7 @@ button {
 
 .app {
   width: 100%;
-  overflow: hidden;
+  overflow-x: clip;
   background: #090909;
 }
 
@@ -342,105 +342,6 @@ button {
   }
 }
 
-/* MOBILE */
-@media (max-width: 650px) {
-  .header {
-    height: auto;
-    min-height: 70px;
-    padding: 18px 5%;
-    flex-wrap: wrap;
-    gap: 15px;
-  }
-
-  .logo {
-    font-size: 19px;
-  }
-
-  .nav {
-    order: 3;
-    width: 100%;
-    overflow-x: auto;
-    gap: 22px;
-    padding: 5px 0;
-  }
-
-  .nav a {
-    flex-shrink: 0;
-    font-size: 12px;
-  }
-
-  .login-button {
-    padding: 8px 15px;
-    font-size: 12px;
-  }
-
-  .hero {
-    min-height: 530px;
-    padding: 65px 7%;
-  }
-
-  .hero-decoration {
-    position: absolute;
-    right: -100px;
-    bottom: 15px;
-    opacity: 0.25;
-    transform: scale(0.8);
-  }
-
- 
-.hero-content {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  position: relative;
-  z-index: 4;
-}
-
-.hero h1 {
-  width: 100%;
-  max-width: 100%;
-  font-size: 32px;
-  line-height: 1.4;
-  word-break: keep-all;
-  overflow-wrap: break-word;
-}
-
-  .hero h1 {
-    font-size: 36px;
-  }
-
-  .hero-content p {
-    font-size: 13px;
-  }
-
-  .welcome {
-    padding: 70px 6%;
-  }
-
-  .welcome h2 {
-    font-size: 27px;
-  }
-
-  .menu-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    margin-top: 35px;
-  }
-
-  .menu-card {
-    min-height: 205px;
-  }
-
-  .community-banner {
-    margin: 0 5% 55px;
-    padding: 45px 15px;
-  }
-
-  .footer {
-    padding: 30px 5%;
-  }
-}
-
 /* ==============================
    LOGO FIX - 펭귄 로고 크기
 ================================ */
@@ -564,26 +465,6 @@ button {
   filter: drop-shadow(0 2px 2px #555555);
 }
 
-/* 모바일 화면 */
-@media (max-width: 650px) {
-  .hero-decoration {
-    width: 260px;
-    height: 320px;
-    flex: 0 0 260px;
-  }
-
-  .hero-character {
-    width: 190px;
-    height: 285px;
-  }
-
-  .logo-image {
-    width: 36px;
-    height: 36px;
-  }
-}
-
-
 /* ==============================
    MOBILE RESPONSIVE IMPROVEMENT
    모바일 화면 최적화
@@ -633,6 +514,7 @@ button {
   .hero-content {
     width: 100%;
     max-width: 100%;
+    min-width: 0;
   }
 
   .hero h1 {
@@ -664,13 +546,13 @@ button {
     height: 300px;
     flex: 0 0 300px;
     opacity: 1;
-    transform: scale(0.85);
     margin-top: -10px;
   }
 
   .hero-character {
     width: 190px;
-    height: 285px;
+    height: 260px;
+    bottom: 24px;
   }
 
   .hero-caption {
@@ -722,5 +604,79 @@ button {
 
   .nav a {
     font-size: 10px;
+  }
+}
+
+/* EMAIL SIGN-IN */
+.auth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(8px);
+}
+
+.auth-modal {
+  width: 100%;
+  max-width: 460px;
+  padding: 28px;
+  color: #fff;
+  background: #151719;
+  border: 1px solid #62676e;
+  border-radius: 12px;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.7);
+}
+
+.auth-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.auth-modal-header h2 {
+  margin: 12px 0;
+  font-size: 24px;
+}
+
+.auth-modal-description {
+  margin: 8px 0 22px;
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.auth-modal-message,
+.auth-modal-error {
+  margin: 0 0 16px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.auth-modal-message {
+  color: #d8dce1;
+}
+
+.auth-modal-error {
+  color: #ff9999;
+}
+
+.auth-modal-submit {
+  width: 100%;
+  margin-top: 2px;
+}
+
+.auth-modal-submit:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+@media (max-width: 550px) {
+  .auth-modal {
+    padding: 22px 18px;
   }
 }

@@ -94,6 +94,19 @@
   font-weight: 700;
 }
 
+.record-save-error {
+  margin: 14px 0 0;
+  color: #ff9999;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.records-status {
+  margin: 18px 0 0;
+  color: #aaaabb;
+  font-size: 13px;
+}
+
 .records-list-heading {
   display: flex;
   justify-content: space-between;
@@ -384,6 +397,12 @@
   color: #111;
   background: linear-gradient(135deg, #fff, #aeb5bd);
   border: 1px solid #cbd0d6;
+}
+
+.record-save-button:disabled,
+.record-cancel-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }
 
 @media (max-width: 550px) {

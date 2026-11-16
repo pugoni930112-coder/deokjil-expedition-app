@@ -1,5 +1,6 @@
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { getSupabaseClient } from '../lib/supabase'
 import './Records.css'
 
 type RecordItem = {
@@ -11,6 +12,23 @@ type RecordItem = {
   review: string
   icon: string
   image?: string
+  id?: string
+}
+
+type DatabaseRecord = {
+  id: string
+  category: string
+  title: string
+  subtitle: string
+  event_date: string
+  place: string
+  review: string
+  image_path: string | null
+}
+
+type RecordsProps = {
+  userId?: string
+  onRequireSignIn: () => void
 }
 
 const initialRecords: RecordItem[] = [
@@ -72,54 +90,171 @@ const initialRecords: RecordItem[] = [
 
 const categories = ['전체', '콘서트', '무대인사', '팝업스토어', '기타']
 
-function Records() {
+function Records({ userId, onRequireSignIn }: RecordsProps) {
   const [selectedCategory, setSelectedCategory] = useState('전체')
-
-    const [isFormOpen, setIsFormOpen] = useState(false)
-
-     const [selectedImage, setSelectedImage] = useState<string | null>(null) 
-
-     const [records, setRecords] = useState<RecordItem[]>(initialRecords)
+  const [isFormOpen, setIsFormOpen] = useState(false)
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [records, setRecords] = useState<RecordItem[]>(initialRecords)
+  const [isLoadingRecords, setIsLoadingRecords] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState('')
 
   const [title, setTitle] = useState('')
   const [category, setCategory] = useState('콘서트')
   const [date, setDate] = useState('')
   const [place, setPlace] = useState('')
-  const [review, setReview] = useState('')  
+  const [review, setReview] = useState('')
+
+  useEffect(() => {
+    let isActive = true
+
+    if (!userId) {
+      setRecords(initialRecords)
+      return () => { isActive = false }
+    }
+
+    const loadRecords = async () => {
+      setIsLoadingRecords(true)
+      const supabase = getSupabaseClient()
+      const { data, error } = await supabase
+        .from('expedition_records')
+        .select('id, category, title, subtitle, event_date, place, review, image_path')
+        .eq('user_id', userId)
+        .order('event_date', { ascending: false })
+        .order('created_at', { ascending: false })
+
+      if (!isActive) return
+
+      if (error) {
+        setSaveError(`기록을 불러오지 못했어요: ${error.message}`)
+        setRecords(initialRecords)
+        setIsLoadingRecords(false)
+        return
+      }
+
+      const savedRecords = await Promise.all((data as DatabaseRecord[]).map(async (record) => {
+        let image: string | undefined
+        if (record.image_path) {
+          const { data: signedImage } = await supabase.storage
+            .from('expedition-record-photos')
+            .createSignedUrl(record.image_path, 60 * 60)
+          image = signedImage?.signedUrl
+        }
+
+        return {
+          id: record.id,
+          category: record.category,
+          title: record.title,
+          subtitle: record.subtitle,
+          date: record.event_date.replaceAll('-', '.'),
+          place: record.place,
+          review: record.review,
+          icon: record.category === '무대인사' ? '✧' : record.category === '기타' ? '♡' : '✦',
+          image,
+        }
+      }))
+
+      if (isActive) {
+        setRecords([...savedRecords, ...initialRecords])
+        setIsLoadingRecords(false)
+      }
+    }
+
+    void loadRecords()
+
+    return () => { isActive = false }
+  }, [userId])
 
   const filteredRecords =
     selectedCategory === '전체'
       ? records
       : records.filter((record) => record.category === selectedCategory)
 
-        const handleSave = () => {
+  const handleSave = async () => {
+    setSaveError('')
+
+    if (!userId) {
+      onRequireSignIn()
+      return
+    }
+
     if (!title.trim() || !date || !place.trim()) {
       alert('제목, 방문 날짜, 방문 장소를 입력해 주세요.')
       return
     }
 
-    const newRecord: RecordItem = {
-      category,
-      title: title.trim(),
-      subtitle: 'OUR FAN JOURNEY',
-      date: date.replaceAll('-', '.'),
-      place: place.trim(),
-      review: review.trim(),
-      icon: '✦',
-      image: selectedImage || undefined,
+    setIsSaving(true)
+    const supabase = getSupabaseClient()
+    let uploadedImagePath: string | null = null
+
+    try {
+      if (selectedImage) {
+        const imageBlob = await fetch(selectedImage).then((response) => response.blob())
+        const extension = imageBlob.type === 'image/jpeg'
+          ? 'jpg'
+          : imageBlob.type.split('/')[1]?.replace('svg+xml', 'svg') || 'jpg'
+        uploadedImagePath = `${userId}/${crypto.randomUUID()}.${extension}`
+        const { error: uploadError } = await supabase.storage
+          .from('expedition-record-photos')
+          .upload(uploadedImagePath, imageBlob, { contentType: imageBlob.type, upsert: false })
+
+        if (uploadError) throw uploadError
+      }
+
+      const { data, error } = await supabase
+        .from('expedition_records')
+        .insert({
+          user_id: userId,
+          category,
+          title: title.trim(),
+          subtitle: 'OUR FAN JOURNEY',
+          event_date: date,
+          place: place.trim(),
+          review: review.trim(),
+          image_path: uploadedImagePath,
+        })
+        .select('id, category, title, subtitle, event_date, place, review, image_path')
+        .single()
+
+      if (error) throw error
+
+      let savedImage: string | undefined = selectedImage || undefined
+      if (data.image_path) {
+        const { data: signedImage } = await supabase.storage
+          .from('expedition-record-photos')
+          .createSignedUrl(data.image_path, 60 * 60)
+        savedImage = signedImage?.signedUrl || savedImage
+      }
+
+      const newRecord: RecordItem = {
+        id: data.id,
+        category: data.category,
+        title: data.title,
+        subtitle: data.subtitle,
+        date: data.event_date.replaceAll('-', '.'),
+        place: data.place,
+        review: data.review,
+        icon: data.category === '무대인사' ? '✧' : data.category === '기타' ? '♡' : '✦',
+        image: savedImage,
+      }
+
+      setRecords((previous) => [newRecord, ...previous])
+      setTitle('')
+      setCategory('콘서트')
+      setDate('')
+      setPlace('')
+      setReview('')
+      setSelectedImage(null)
+      setIsFormOpen(false)
+      alert('원정 기록이 Supabase에 저장되었어요!')
+    } catch (error) {
+      if (uploadedImagePath) {
+        await supabase.storage.from('expedition-record-photos').remove([uploadedImagePath])
+      }
+      setSaveError(error instanceof Error ? error.message : '원정 기록을 저장하지 못했어요.')
+    } finally {
+      setIsSaving(false)
     }
-
-    setRecords((previous) => [newRecord, ...previous])
-
-    setTitle('')
-    setCategory('콘서트')
-    setDate('')
-    setPlace('')
-    setReview('')
-    setSelectedImage(null)
-    setIsFormOpen(false)
-
-    alert('원정 기록이 추가되었어요!')
   }
 
   return (
@@ -251,9 +386,13 @@ function Records() {
 />
       </label>
 
+      {saveError && <p className="record-save-error">{saveError}</p>}
+
       <div className="record-modal-actions">
         <button
+          type="button"
           className="record-cancel-button"
+          disabled={isSaving}
           onClick={() => setIsFormOpen(false)}
         >
           취소
@@ -262,9 +401,10 @@ function Records() {
        <button
   type="button"
   className="record-save-button"
+  disabled={isSaving}
   onClick={handleSave}
 >
-  기록 저장하기
+  {isSaving ? '저장 중…' : '기록 저장하기'}
 </button>
       </div>
     </div>
@@ -312,6 +452,9 @@ function Records() {
   + 기록 추가하기
 </button>
         </div>
+
+        {saveError && !isFormOpen && <p className="record-save-error">{saveError}</p>}
+        {isLoadingRecords && <p className="records-status">저장된 원정 기록을 불러오는 중…</p>}
 
         <div className="records-list-heading">
           <span>총 {filteredRecords.length}개의 기록</span>

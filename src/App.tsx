@@ -1,7 +1,11 @@
 
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import type { Session } from '@supabase/supabase-js'
 import Home from './pages/Home'
 import Records from './pages/Records'
+import AuthModal from './components/AuthModal'
+import { getSupabaseClient, isSupabaseConfigured } from './lib/supabase'
 import './App.css'
 
 function SubPage({
@@ -39,6 +43,39 @@ function SubPage({
 }
 
 function App() {
+  const [session, setSession] = useState<Session | null>(null)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return
+
+    const supabase = getSupabaseClient()
+    let isMounted = true
+
+    void supabase.auth.getSession().then(({ data }) => {
+      if (isMounted) setSession(data.session)
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession)
+    })
+
+    return () => {
+      isMounted = false
+      subscription.unsubscribe()
+    }
+  }, [])
+
+  const handleAuthButtonClick = async () => {
+    if (!session) {
+      setIsAuthModalOpen(true)
+      return
+    }
+
+    const { error } = await getSupabaseClient().auth.signOut()
+    if (error) window.alert(`로그아웃하지 못했어요: ${error.message}`)
+  }
+
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <div className="app">
@@ -61,8 +98,8 @@ function App() {
             <Link to="/archive">ARCHIVE</Link>
           </nav>
 
-          <button className="login-button">
-            로그인
+          <button className="login-button" onClick={handleAuthButtonClick}>
+            {session ? '로그아웃' : '로그인'}
           </button>
         </header>
 
@@ -71,7 +108,15 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
 
-           <Route path="/records" element={<Records />} />
+           <Route
+              path="/records"
+              element={
+                <Records
+                  userId={session?.user.id}
+                  onRequireSignIn={() => setIsAuthModalOpen(true)}
+                />
+              }
+            />
 
             <Route
               path="/map"
@@ -110,6 +155,10 @@ function App() {
           <span>✦ 덕질 원정대</span>
           <p>FAN-MADE COMMUNITY · NOT OFFICIALLY AFFILIATED</p>
         </footer>
+
+        {isAuthModalOpen && (
+          <AuthModal onClose={() => setIsAuthModalOpen(false)} />
+        )}
       </div>
     </BrowserRouter>
   )
