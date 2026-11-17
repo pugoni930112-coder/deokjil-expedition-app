@@ -103,7 +103,12 @@ function searchVworldPlaces(query: string): Promise<VworldPlace[]> {
       const places = items.flatMap((item: any, index: number) => {
         const longitude = Number(item.point?.x)
         const latitude = Number(item.point?.y)
-        if (!Number.isFinite(longitude) || !Number.isFinite(latitude)) return []
+        if (
+          !Number.isFinite(longitude) ||
+          !Number.isFinite(latitude) ||
+          longitude < -180 || longitude > 180 ||
+          latitude < -90 || latitude > 90
+        ) return []
         return [{
           id: String(item.id || `${item.title}-${longitude}-${latitude}-${index}`),
           title: String(item.title || '검색한 장소'),
@@ -311,12 +316,17 @@ function RestaurantMap({ userId, onRequireSignIn }: RestaurantMapProps) {
 
   useEffect(() => {
     if (!selectedSearchPlace || !mapRef.current || !window.ol) return
-    const center = window.ol.proj.transform(
-      [selectedSearchPlace.longitude, selectedSearchPlace.latitude],
-      'EPSG:4326',
-      'EPSG:3857',
-    )
-    mapRef.current.getView().animate({ center, zoom: 16, duration: 500 })
+    try {
+      const center = window.ol.proj.transform(
+        [selectedSearchPlace.longitude, selectedSearchPlace.latitude],
+        'EPSG:4326',
+        'EPSG:3857',
+      )
+      mapRef.current.getView().setCenter(center)
+      mapRef.current.getView().setZoom(16)
+    } catch {
+      setPlaceSearchError('검색한 위치로 지도를 이동하지 못했어요. 다른 결과를 선택해 주세요.')
+    }
   }, [selectedSearchPlace, isMapReady])
 
   useEffect(() => {
@@ -341,8 +351,8 @@ function RestaurantMap({ userId, onRequireSignIn }: RestaurantMapProps) {
     source.addFeature(feature)
   }, [selectedSearchPlace, isMapReady])
 
-  const handlePlaceSearch = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const handlePlaceSearch = async (event?: { preventDefault: () => void }) => {
+    event?.preventDefault()
     const query = placeQuery.trim()
     if (!query) {
       setPlaceSearchError('찾을 음식점 이름이나 지역을 입력해 주세요.')
@@ -466,7 +476,7 @@ function RestaurantMap({ userId, onRequireSignIn }: RestaurantMapProps) {
                 placeholder="음식점 이름이나 지역을 검색하세요"
                 aria-label="브이월드 음식점 및 장소 검색"
               />
-              <button type="submit" disabled={isSearchingPlaces}>
+              <button type="button" onClick={(event) => void handlePlaceSearch(event)} disabled={isSearchingPlaces}>
                 {isSearchingPlaces ? '검색 중…' : '지도 검색'}
               </button>
             </form>
