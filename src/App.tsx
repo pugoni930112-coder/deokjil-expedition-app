@@ -114,7 +114,12 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/signup" element={<Signup onRequireSignIn={() => setIsAuthModalOpen(true)} />} />
+            <Route
+              path="/signup"
+              element={session
+                ? <Navigate to="/" replace />
+                : <Signup onRequireSignIn={() => setIsAuthModalOpen(true)} />}
+            />
             <Route path="/password-reset" element={<PasswordReset />} />
 
            <Route

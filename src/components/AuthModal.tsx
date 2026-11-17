@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getSupabaseClient, isSupabaseConfigured } from '../lib/supabase'
+import { getAuthRedirectUrl } from '../lib/authRedirect'
 
 type AuthModalProps = {
   onClose: () => void
@@ -60,7 +61,7 @@ function AuthModal({ onClose }: AuthModalProps) {
       const { error } = await getSupabaseClient().auth.signInWithOtp({
         email: email.trim(),
         options: {
-          emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}`,
+          emailRedirectTo: getAuthRedirectUrl(),
           shouldCreateUser: false,
         },
       })

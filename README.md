@@ -48,6 +48,8 @@ In Supabase Dashboard, open **Authentication → URL Configuration**. Set the **
 - `https://pugoni930112-coder.github.io/deokjil-expedition-app/`
 - `https://pugoni930112-coder.github.io/deokjil-expedition-app/password-reset`
 
+Email confirmation and password reset links always return to the deployed GitHub Pages app, including when signup starts on a local development server.
+
 ### GitHub Pages build
 
 The Pages workflow supplies the Supabase project URL and publishable key during the Vite build. These are public client settings; never use a Supabase service-role or secret key in the browser app.

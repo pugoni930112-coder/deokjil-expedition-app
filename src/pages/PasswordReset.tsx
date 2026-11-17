@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { getSupabaseClient, isSupabaseConfigured } from '../lib/supabase'
+import { getAuthRedirectUrl } from '../lib/authRedirect'
 import './Signup.css'
 
 function PasswordReset() {
@@ -38,7 +39,7 @@ function PasswordReset() {
     setIsSubmitting(true)
     try {
       const { error: requestError } = await getSupabaseClient().auth.resetPasswordForEmail(email.trim(), {
-        redirectTo: `${window.location.origin}${import.meta.env.BASE_URL}password-reset`,
+        redirectTo: getAuthRedirectUrl('password-reset'),
       })
       if (requestError) {
         setError('재설정 메일을 보내지 못했어요. 이메일 주소를 확인해 주세요.')

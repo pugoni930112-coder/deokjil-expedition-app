@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { getSupabaseClient, isSupabaseConfigured } from '../lib/supabase'
+import { getAuthRedirectUrl } from '../lib/authRedirect'
 import './Signup.css'
 
 type SignupProps = {
@@ -8,6 +9,7 @@ type SignupProps = {
 }
 
 function Signup({ onRequireSignIn }: SignupProps) {
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -52,7 +54,7 @@ function Signup({ onRequireSignIn }: SignupProps) {
         email: email.trim(),
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}`,
+          emailRedirectTo: getAuthRedirectUrl(),
           data: {
             phone_number: normalizedPhone,
             twitter_id: normalizedTwitterId || null,
@@ -63,7 +65,7 @@ function Signup({ onRequireSignIn }: SignupProps) {
       if (signupError) {
         setError(signupError.message)
       } else if (data.session) {
-        setMessage('회원가입과 로그인이 완료됐어요. 덕질 원정을 시작해 보세요!')
+        navigate('/', { replace: true })
       } else {
         setMessage('인증 메일을 보냈어요. 받은편지함에서 이메일 인증을 완료해 주세요. 입력한 휴대폰 번호와 X 아이디는 다른 이용자에게 공개되지 않아요.')
       }
