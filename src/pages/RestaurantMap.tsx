@@ -30,7 +30,6 @@ declare global {
 }
 
 const apiKey = import.meta.env.VITE_VWORLD_API_KEY?.trim() || ''
-const scriptId = 'vworld-2d-map-api'
 
 const emptyForm = {
   name: '',
@@ -39,35 +38,21 @@ const emptyForm = {
   description: '',
 }
 
-function loadVworldApi(key: string): Promise<void> {
-  if (window.vw?.ol3?.Map && window.ol) return Promise.resolve()
-
+function waitForVworldApi(): Promise<void> {
   return new Promise((resolve, reject) => {
-    let script = document.getElementById(scriptId) as HTMLScriptElement | null
-    const isNewScript = !script
-    if (!script) {
-      const query = new URLSearchParams({ version: '2.0', apiKey: key, domain: window.location.hostname })
-      script = document.createElement('script')
-      script.id = scriptId
-      script.src = `https://map.vworld.kr/js/vworldMapInit.js.do?${query.toString()}`
-      script.async = true
+    const startedAt = Date.now()
+    const checkApi = () => {
+      if (window.vw?.ol3?.Map && window.ol) {
+        resolve()
+        return
+      }
+      if (Date.now() - startedAt > 12000) {
+        reject(new Error('브이월드 지도 API를 불러오지 못했어요. 인증키와 등록 도메인을 확인해 주세요.'))
+        return
+      }
+      window.setTimeout(checkApi, 100)
     }
-
-    const onLoad = () => {
-      script?.removeEventListener('load', onLoad)
-      script?.removeEventListener('error', onError)
-      if (window.vw?.ol3?.Map && window.ol) resolve()
-      else reject(new Error('브이월드 지도 API를 불러오지 못했어요. 인증키와 등록 도메인을 확인해 주세요.'))
-    }
-    const onError = () => {
-      script?.removeEventListener('load', onLoad)
-      script?.removeEventListener('error', onError)
-      reject(new Error('브이월드 지도 서버에 연결할 수 없어요. 잠시 후 다시 시도해 주세요.'))
-    }
-
-    script.addEventListener('load', onLoad, { once: true })
-    script.addEventListener('error', onError, { once: true })
-    if (isNewScript) document.head.appendChild(script)
+    checkApi()
   })
 }
 
@@ -129,7 +114,7 @@ function RestaurantMap({ userId, onRequireSignIn }: RestaurantMapProps) {
     let map: any
     let resizeObserver: ResizeObserver | undefined
 
-    void loadVworldApi(apiKey)
+    void waitForVworldApi()
       .then(() => {
         if (isCancelled || !mapElement.current) return
 
