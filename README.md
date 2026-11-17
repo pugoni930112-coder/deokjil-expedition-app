@@ -33,7 +33,7 @@ See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rule
 
 ## Supabase setup
 
-The app uses Supabase for email/password sign-up and sign-in, email-link sign-in, private expedition records and photos, and fan-market posts.
+The app uses Supabase for email/password sign-up and sign-in, email-link sign-in, password recovery, private expedition records and photos, and fan-market posts. Sign-up requires an email, an 8-character minimum password, and a phone number; an X handle is optional. Phone numbers and X handles are stored as private account metadata and are not used for SMS verification.
 
 ### Local development
 
@@ -44,7 +44,9 @@ Copy `.env.example` to `.env.local` and set the project URL and publishable key 
 In Supabase Dashboard, open **Authentication → URL Configuration** and add these exact URLs under **Redirect URLs**:
 
 - `http://localhost:5173/deokjil-expedition-app/`
+- `http://localhost:5173/deokjil-expedition-app/password-reset`
 - `https://pugoni930112-coder.github.io/deokjil-expedition-app/`
+- `https://pugoni930112-coder.github.io/deokjil-expedition-app/password-reset`
 
 ### GitHub Pages build
 

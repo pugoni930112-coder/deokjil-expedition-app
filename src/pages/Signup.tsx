@@ -11,6 +11,8 @@ function Signup({ onRequireSignIn }: SignupProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [twitterId, setTwitterId] = useState('')
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -28,6 +30,17 @@ function Signup({ onRequireSignIn }: SignupProps) {
       setError('비밀번호가 서로 일치하지 않아요.')
       return
     }
+    const normalizedPhone = phoneNumber.trim().replace(/[\s().-]/g, '')
+    const phoneDigits = normalizedPhone.replace(/^\+/, '')
+    if (!/^\d{8,15}$/.test(phoneDigits)) {
+      setError('휴대폰 번호를 국가번호와 함께 입력해 주세요. 예: +82 10-1234-5678')
+      return
+    }
+    const normalizedTwitterId = twitterId.trim().replace(/^@/, '')
+    if (normalizedTwitterId && !/^[A-Za-z0-9_]{1,15}$/.test(normalizedTwitterId)) {
+      setError('X(트위터) 아이디는 영문, 숫자, 밑줄로 15자 이내로 입력해 주세요.')
+      return
+    }
     if (!isSupabaseConfigured()) {
       setError('회원가입 서버 설정을 준비 중이에요. 잠시 후 다시 이용해 주세요.')
       return
@@ -40,6 +53,10 @@ function Signup({ onRequireSignIn }: SignupProps) {
         password,
         options: {
           emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}`,
+          data: {
+            phone_number: normalizedPhone,
+            twitter_id: normalizedTwitterId || null,
+          },
         },
       })
 
@@ -48,7 +65,7 @@ function Signup({ onRequireSignIn }: SignupProps) {
       } else if (data.session) {
         setMessage('회원가입과 로그인이 완료됐어요. 덕질 원정을 시작해 보세요!')
       } else {
-        setMessage('인증 메일을 보냈어요. 받은편지함에서 이메일 인증을 완료해 주세요.')
+        setMessage('인증 메일을 보냈어요. 받은편지함에서 이메일 인증을 완료해 주세요. 입력한 휴대폰 번호와 X 아이디는 다른 이용자에게 공개되지 않아요.')
       }
     } catch {
       setError('회원가입을 완료하지 못했어요. 잠시 후 다시 시도해 주세요.')
@@ -111,6 +128,32 @@ function Signup({ onRequireSignIn }: SignupProps) {
               placeholder="비밀번호를 한 번 더 입력해 주세요"
             />
           </label>
+          <label className="record-modal-label" htmlFor="signup-phone">
+            휴대폰 번호 <span className="signup-required-label">필수</span>
+            <input
+              id="signup-phone"
+              type="tel"
+              autoComplete="tel"
+              required
+              value={phoneNumber}
+              onChange={(event) => setPhoneNumber(event.target.value)}
+              placeholder="+82 10-1234-5678"
+            />
+          </label>
+          <p className="signup-field-note">휴대폰 번호로 SMS 인증은 하지 않으며, 다른 이용자에게 공개하지 않아요.</p>
+          <label className="record-modal-label" htmlFor="signup-twitter">
+            X(트위터) 아이디 <span className="signup-optional-label">선택</span>
+            <input
+              id="signup-twitter"
+              type="text"
+              autoComplete="off"
+              maxLength={16}
+              value={twitterId}
+              onChange={(event) => setTwitterId(event.target.value)}
+              placeholder="@username"
+            />
+          </label>
+          <p className="signup-field-note">선택 입력이며, 다른 이용자에게 공개되지 않아요.</p>
 
           {message && <p className="signup-message" role="status">{message}</p>}
           {error && <p className="signup-error" role="alert">{error}</p>}

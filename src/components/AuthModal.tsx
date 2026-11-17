@@ -147,6 +147,17 @@ function AuthModal({ onClose }: AuthModalProps) {
           <button type="button" className="auth-modal-text-button" onClick={handleMagicLink} disabled={isSending}>
             이메일 로그인 링크 받기
           </button>
+          <Link
+            className="auth-modal-recovery-link"
+            to="/password-reset"
+            onClick={(event) => {
+              event.preventDefault()
+              onClose()
+              navigate('/password-reset')
+            }}
+          >
+            아이디 / 비밀번호 찾기
+          </Link>
           <span>처음 오셨나요?</span>
           <Link
             to="/signup"

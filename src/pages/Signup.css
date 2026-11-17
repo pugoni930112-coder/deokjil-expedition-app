@@ -37,6 +37,25 @@
   margin-bottom: 16px;
 }
 
+.signup-required-label,
+.signup-optional-label {
+  margin-left: 6px;
+  color: #aeb5bd;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.signup-field-note {
+  margin: -8px 0 16px;
+  color: #888;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.account-help-note {
+  margin: 18px 0 0;
+}
+
 .signup-submit {
   width: 100%;
   min-height: 48px;
@@ -138,6 +157,11 @@
 .auth-modal-footer a {
   font-weight: 700;
   text-decoration: underline;
+}
+
+.auth-modal-footer .auth-modal-recovery-link {
+  color: #bfc5ca;
+  font-weight: 400;
 }
 
 @media (max-width: 550px) {

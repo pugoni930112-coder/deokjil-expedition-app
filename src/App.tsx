@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import Records from './pages/Records'
 import Marketplace from './pages/Marketplace'
 import Signup from './pages/Signup'
+import PasswordReset from './pages/PasswordReset'
 import AuthModal from './components/AuthModal'
 import { getSupabaseClient, isSupabaseConfigured } from './lib/supabase'
 import './App.css'
@@ -114,6 +115,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<Signup onRequireSignIn={() => setIsAuthModalOpen(true)} />} />
+            <Route path="/password-reset" element={<PasswordReset />} />
 
            <Route
               path="/records"
