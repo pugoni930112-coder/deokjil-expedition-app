@@ -5,6 +5,7 @@ import type { Session } from '@supabase/supabase-js'
 import Home from './pages/Home'
 import Records from './pages/Records'
 import Marketplace from './pages/Marketplace'
+import Signup from './pages/Signup'
 import AuthModal from './components/AuthModal'
 import { getSupabaseClient, isSupabaseConfigured } from './lib/supabase'
 import './App.css'
@@ -103,12 +104,14 @@ function App() {
           <button className="login-button" onClick={handleAuthButtonClick}>
             {session ? '로그아웃' : '로그인'}
           </button>
+          {!session && <Link className="signup-link" to="/signup">회원가입</Link>}
         </header>
 
         {/* APP SCREENS */}
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/signup" element={<Signup onRequireSignIn={() => setIsAuthModalOpen(true)} />} />
 
            <Route
               path="/records"

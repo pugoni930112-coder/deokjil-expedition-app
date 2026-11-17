@@ -33,13 +33,13 @@ See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rule
 
 ## Supabase setup
 
-The app uses Supabase for email-link sign-in, private expedition records, and private record photos.
+The app uses Supabase for email/password sign-up and sign-in, email-link sign-in, private expedition records and photos, and fan-market posts.
 
 ### Local development
 
 Copy `.env.example` to `.env.local` and set the project URL and publishable key from the Supabase project API settings. `.env.local` is ignored by Git.
 
-### Email sign-in redirects
+### Authentication redirect URLs
 
 In Supabase Dashboard, open **Authentication → URL Configuration** and add these exact URLs under **Redirect URLs**:
 

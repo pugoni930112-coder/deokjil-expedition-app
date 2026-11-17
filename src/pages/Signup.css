@@ -1,0 +1,156 @@
+.signup-page {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 20px 80px;
+  background: radial-gradient(ellipse at 50% 0%, #222528 0%, #090909 58%);
+}
+
+.signup-card {
+  width: min(100%, 480px);
+  padding: 34px;
+  border: 1px solid #3d4145;
+  border-radius: 10px;
+  background: #141516;
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.4);
+}
+
+.signup-card h1 {
+  margin: 16px 0 8px;
+  font-size: 32px;
+  letter-spacing: -1px;
+}
+
+.signup-description {
+  margin: 0;
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.signup-form {
+  margin-top: 26px;
+}
+
+.signup-form .record-modal-label {
+  margin-bottom: 16px;
+}
+
+.signup-submit {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 5px;
+}
+
+.signup-submit:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.signup-setup-note,
+.signup-message,
+.signup-error {
+  margin: 18px 0 0;
+  padding: 12px 14px;
+  border: 1px solid #5c5238;
+  border-radius: 5px;
+  background: #211e16;
+  color: #e3d7b2;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.signup-message {
+  border-color: #3f5b49;
+  background: #152119;
+  color: #c6e4cf;
+}
+
+.signup-error {
+  border-color: #714040;
+  background: #241717;
+  color: #ffb4b4;
+}
+
+.signup-login-prompt {
+  margin: 22px 0 0;
+  color: #999;
+  font-size: 12px;
+  text-align: center;
+}
+
+.signup-login-prompt button {
+  padding: 0;
+  border: 0;
+  color: #eee;
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.signup-home-link {
+  display: block;
+  margin-top: 19px;
+  color: #777;
+  font-size: 11px;
+  text-align: center;
+}
+
+.signup-home-link:hover {
+  color: #ddd;
+}
+
+.auth-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+  color: #999;
+  font-size: 12px;
+}
+
+.auth-modal-text-button,
+.auth-modal-footer a {
+  padding: 0;
+  border: 0;
+  color: #eee;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.auth-modal-text-button {
+  width: 100%;
+  margin-bottom: 5px;
+  color: #bfc5ca;
+  text-decoration: underline;
+}
+
+.auth-modal-text-button:disabled {
+  opacity: 0.55;
+}
+
+.auth-modal-footer a {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+@media (max-width: 550px) {
+  .signup-page {
+    min-height: calc(100vh - 130px);
+    padding: 40px 16px 55px;
+  }
+
+  .signup-card {
+    padding: 26px 20px;
+  }
+
+  .signup-card h1 {
+    font-size: 28px;
+  }
+}

@@ -97,6 +97,21 @@ button {
   color: #090909;
 }
 
+.signup-link {
+  padding: 9px 15px;
+  border: 1px solid #bfc3c9;
+  border-radius: 30px;
+  color: #090909;
+  background: #e5e7e9;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.signup-link:hover {
+  background: #ffffff;
+}
+
 /* HERO */
 .hero {
   min-height: 540px;
@@ -482,7 +497,7 @@ button {
     padding: 12px 5%;
     gap: 10px;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto auto;
   }
 
   .logo {
@@ -521,6 +536,13 @@ button {
     grid-column: 2;
     grid-row: 1;
     padding: 8px 15px;
+  }
+
+  .signup-link {
+    grid-column: 3;
+    grid-row: 1;
+    padding: 8px 12px;
+    font-size: 12px;
   }
 
   /* 메인 히어로 영역 */
