@@ -41,7 +41,7 @@ Copy `.env.example` to `.env.local` and set the project URL and publishable key 
 
 ### Authentication redirect URLs
 
-In Supabase Dashboard, open **Authentication → URL Configuration** and add these exact URLs under **Redirect URLs**:
+In Supabase Dashboard, open **Authentication → URL Configuration**. Set the **Site URL** to `https://pugoni930112-coder.github.io/deokjil-expedition-app/` and add these exact URLs under **Redirect URLs**:
 
 - `http://localhost:5173/deokjil-expedition-app/`
 - `http://localhost:5173/deokjil-expedition-app/password-reset`
@@ -50,9 +50,4 @@ In Supabase Dashboard, open **Authentication → URL Configuration** and add the
 
 ### GitHub Pages build
 
-In the repository's **Settings → Secrets and variables → Actions**, add these repository secrets. The Pages workflow reads them during the Vite build:
-
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_PUBLISHABLE_KEY`
-
-Never use a Supabase service-role or secret key in the browser app.
+The Pages workflow supplies the Supabase project URL and publishable key during the Vite build. These are public client settings; never use a Supabase service-role or secret key in the browser app.
