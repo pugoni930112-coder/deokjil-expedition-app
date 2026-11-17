@@ -37,6 +37,7 @@ jobs:
           # These are public client settings; Supabase publishable keys are intended for browser apps.
           VITE_SUPABASE_URL: https://luvyqqgwemjeclhltxou.supabase.co
           VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_awIdL0wZRC1-YMiKhsbicg_0HumRuU0
+          VITE_VWORLD_API_KEY: ${{ secrets.VWORLD_API_KEY }}
         run: npm run build
 
       - name: Upload artifact

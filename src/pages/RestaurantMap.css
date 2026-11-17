@@ -1,0 +1,374 @@
+.restaurant-map-page {
+  min-height: 70vh;
+  padding: 72px 7% 90px;
+  background: radial-gradient(ellipse at 50% 0, #1b1c1e 0, #090909 440px);
+}
+
+.restaurant-map-heading {
+  max-width: 1180px;
+  margin: 0 auto 34px;
+}
+
+.restaurant-map-heading h1 {
+  margin: 17px 0 9px;
+  font-size: clamp(30px, 4vw, 44px);
+  letter-spacing: -1.8px;
+}
+
+.restaurant-map-heading p,
+.restaurant-map-toolbar > span,
+.restaurant-map-attribution {
+  color: #a3a8ae;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.restaurant-map-toolbar {
+  max-width: 1180px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.restaurant-map-toolbar button,
+.restaurant-form-submit {
+  border: 1px solid #e5e8eb;
+  border-radius: 4px;
+  padding: 11px 17px;
+  background: linear-gradient(120deg, #f4f5f6, #b7bec6);
+  color: #101214;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.restaurant-map-message,
+.restaurant-map-pick-hint {
+  max-width: 1180px;
+  margin: 0 auto 12px;
+  color: #c5ccd3;
+  font-size: 13px;
+}
+
+.restaurant-map-pick-hint {
+  padding: 12px 15px;
+  border: 1px solid #626b76;
+  background: #171a1d;
+  color: #f0f2f4;
+}
+
+.restaurant-map-pick-hint button {
+  margin-left: 12px;
+  padding: 4px 9px;
+  border: 1px solid #5d6268;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.restaurant-map-layout {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(275px, 0.8fr);
+  align-items: start;
+  gap: 16px;
+}
+
+.restaurant-map-main,
+.restaurant-map-sidebar,
+.restaurant-form {
+  border: 1px solid #33383d;
+  border-radius: 6px;
+  background: #141618;
+  overflow: hidden;
+}
+
+.restaurant-map-canvas {
+  width: 100%;
+  height: min(65vh, 610px);
+  min-height: 430px;
+  position: relative;
+  background: #1d2023;
+}
+
+.restaurant-map-canvas.is-picking {
+  cursor: crosshair;
+}
+
+.restaurant-map-canvas > div:first-child:not(.restaurant-map-key-notice) {
+  height: 100%;
+}
+
+.restaurant-map-key-notice {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  background: radial-gradient(ellipse at center, #292d31, #191b1e 72%);
+}
+
+.restaurant-map-key-notice > span {
+  color: #e1e5e9;
+  font-size: 44px;
+}
+
+.restaurant-map-key-notice h2 {
+  margin: 14px 0 4px;
+  font-size: 20px;
+}
+
+.restaurant-map-key-notice p {
+  max-width: 450px;
+  color: #aeb5bd;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.restaurant-map-key-notice a {
+  margin-top: 8px;
+  color: #f2f3f4;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.restaurant-map-sidebar {
+  max-height: min(65vh, 610px);
+  min-height: 430px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.restaurant-list-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+}
+
+.restaurant-list-heading h2 {
+  margin: 8px 0 14px;
+  font-size: 20px;
+}
+
+.restaurant-list-heading > span {
+  padding-bottom: 16px;
+  color: #aeb5bd;
+  font-size: 13px;
+}
+
+.restaurant-map-search,
+.restaurant-form input,
+.restaurant-form select,
+.restaurant-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #464c52;
+  border-radius: 4px;
+  outline: none;
+  background: #202327;
+  color: #f3f4f5;
+  font: inherit;
+  font-size: 13px;
+}
+
+.restaurant-map-search:focus,
+.restaurant-form input:focus,
+.restaurant-form select:focus,
+.restaurant-form textarea:focus {
+  border-color: #aeb8c2;
+}
+
+.restaurant-list {
+  margin-top: 12px;
+  overflow-y: auto;
+}
+
+.restaurant-list-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 14px 2px;
+  border: 0;
+  border-bottom: 1px solid #303438;
+  background: transparent;
+  color: #f3f4f5;
+  text-align: left;
+  cursor: pointer;
+}
+
+.restaurant-list-card:hover,
+.restaurant-list-card.is-selected {
+  padding-left: 10px;
+  background: #1d2023;
+}
+
+.restaurant-category {
+  color: #aeb5bd;
+  font-size: 10px;
+}
+
+.restaurant-list-card strong {
+  font-size: 15px;
+}
+
+.restaurant-address,
+.restaurant-description {
+  color: #9ca3aa;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.restaurant-description {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.restaurant-list-empty {
+  flex: 1;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  min-height: 150px;
+  color: #9ca3aa;
+  font-size: 13px;
+  text-align: center;
+}
+
+.restaurant-list-empty > span {
+  color: #bfc5cb;
+  font-size: 24px;
+}
+
+.restaurant-form {
+  margin-top: 14px;
+  padding: 20px;
+}
+
+.restaurant-form-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.restaurant-form-heading h2 {
+  margin: 8px 0;
+  font-size: 20px;
+}
+
+.restaurant-form-heading > button {
+  border: 0;
+  background: none;
+  color: #c5cbd1;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.restaurant-picked-coordinates,
+.restaurant-form-safety {
+  color: #a1a8af;
+  font-size: 11px;
+}
+
+.restaurant-form label {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  color: #e1e4e7;
+  font-size: 12px;
+}
+
+.restaurant-form textarea {
+  resize: vertical;
+}
+
+.restaurant-form-submit {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.restaurant-form-submit:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.restaurant-map-attribution {
+  max-width: 1180px;
+  margin: 14px auto 0;
+  font-size: 11px;
+  text-align: right;
+}
+
+@media (max-width: 800px) {
+  .restaurant-map-page {
+    padding: 52px 5% 65px;
+  }
+
+  .restaurant-map-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .restaurant-map-canvas {
+    height: 52vh;
+    min-height: 350px;
+  }
+
+  .restaurant-map-sidebar {
+    max-height: none;
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 500px) {
+  .restaurant-map-page {
+    padding: 38px 5% 50px;
+  }
+
+  .restaurant-map-heading {
+    margin-bottom: 24px;
+  }
+
+  .restaurant-map-heading p {
+    font-size: 12px;
+  }
+
+  .restaurant-map-toolbar {
+    align-items: flex-start;
+  }
+
+  .restaurant-map-toolbar > span {
+    max-width: 55%;
+    font-size: 11px;
+  }
+
+  .restaurant-map-toolbar button {
+    padding: 9px 10px;
+    font-size: 11px;
+  }
+
+  .restaurant-map-canvas {
+    height: 380px;
+    min-height: 0;
+  }
+
+  .restaurant-map-sidebar {
+    padding: 16px;
+  }
+
+  .restaurant-map-attribution {
+    text-align: left;
+  }
+}

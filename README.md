@@ -33,7 +33,9 @@ See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rule
 
 ## Supabase setup
 
-The app uses Supabase for email/password sign-up and sign-in, email-link sign-in, password recovery, private expedition records and photos, and fan-market posts. Sign-up requires an email, an 8-character minimum password, and a phone number; an X handle is optional. Phone numbers and X handles are stored as private account metadata and are not used for SMS verification.
+The app uses Supabase for email/password sign-up and sign-in, email-link sign-in, password recovery, private expedition records and photos, fan-market posts, and publicly readable fan-recommended places. Sign-up requires an email, an 8-character minimum password, and a phone number; an X handle is optional. Phone numbers and X handles are stored as private account metadata and are not used for SMS verification. Only signed-in users can add or edit a fan-recommended place.
+
+The restaurant map uses the VWorld 2D JavaScript map API. Get an API key from the [VWorld developer center](https://www.vworld.kr/dev/v4dv_opn2dmap2guide_s001.do), allow the development host and `pugoni930112-coder.github.io` in its domain settings, then set `VITE_VWORLD_API_KEY` in `.env.local` for local development. For GitHub Pages, add the same key as the `VWORLD_API_KEY` repository Actions secret; the key is compiled into the browser app, so restrict its allowed domains in VWorld.
 
 ### Local development
 
@@ -52,4 +54,4 @@ Email confirmation and password reset links always return to the deployed GitHub
 
 ### GitHub Pages build
 
-The Pages workflow supplies the Supabase project URL and publishable key during the Vite build. These are public client settings; never use a Supabase service-role or secret key in the browser app.
+The Pages workflow supplies the Supabase project URL, publishable key, and VWorld API key during the Vite build. These are browser-side client settings; never use a Supabase service-role or secret key in the browser app.

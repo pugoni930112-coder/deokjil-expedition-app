@@ -5,6 +5,7 @@ import type { Session } from '@supabase/supabase-js'
 import Home from './pages/Home'
 import Records from './pages/Records'
 import Marketplace from './pages/Marketplace'
+import RestaurantMap from './pages/RestaurantMap'
 import Signup from './pages/Signup'
 import PasswordReset from './pages/PasswordReset'
 import AuthModal from './components/AuthModal'
@@ -135,9 +136,9 @@ function App() {
             <Route
               path="/map"
               element={
-                <SubPage
-                  title="도경수 맛집 지도"
-                  description="함께 가고 싶은 맛집과 덕질 코스를 찾아봐요."
+                <RestaurantMap
+                  userId={session?.user.id}
+                  onRequireSignIn={() => setIsAuthModalOpen(true)}
                 />
               }
             />
