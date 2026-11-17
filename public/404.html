@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>덕질 원정대</title>
+    <script>
+      const projectPath = '/deokjil-expedition-app'
+      const routePath = window.location.pathname.slice(projectPath.length) || '/'
+      const routeWithQueryAndHash = routePath + window.location.search + window.location.hash
+      window.location.replace(`${projectPath}/?p=${encodeURIComponent(routeWithQueryAndHash)}`)
+    </script>
+  </head>
+  <body></body>
+</html>

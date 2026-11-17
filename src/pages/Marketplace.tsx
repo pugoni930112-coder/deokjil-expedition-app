@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
 import { getSupabaseClient, isSupabaseConfigured } from '../lib/supabase'
 import './Marketplace.css'
 
@@ -136,10 +135,6 @@ function Marketplace({ listingType, userId, onRequireSignIn }: MarketplaceProps)
       </div>
 
       <div className="marketplace-toolbar">
-        <div className="marketplace-tabs" aria-label="팬 마켓 종류">
-          <Link className={isExchange ? 'active' : ''} to="/market/photocards">포카 교환</Link>
-          <Link className={!isExchange ? 'active' : ''} to="/market/goods">굿즈 판매</Link>
-        </div>
         <button className="marketplace-create-button" type="button" onClick={handleCreateClick}>
           + 글쓰기
         </button>
