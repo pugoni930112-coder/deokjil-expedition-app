@@ -99,6 +99,101 @@
   cursor: crosshair;
 }
 
+.restaurant-place-search {
+  padding: 15px;
+  border-bottom: 1px solid #33383d;
+}
+
+.restaurant-place-search-form {
+  display: flex;
+  gap: 8px;
+}
+
+.restaurant-place-search-form input {
+  min-width: 0;
+  flex: 1;
+  padding: 11px 12px;
+  border: 1px solid #464c52;
+  border-radius: 4px;
+  outline: none;
+  background: #202327;
+  color: #f3f4f5;
+  font: inherit;
+  font-size: 13px;
+}
+
+.restaurant-place-search-form input:focus {
+  border-color: #aeb8c2;
+}
+
+.restaurant-place-search-form button {
+  flex: 0 0 auto;
+  padding: 0 15px;
+  border: 1px solid #c7cdd3;
+  border-radius: 4px;
+  background: #dce0e4;
+  color: #141618;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.restaurant-place-search-form button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.restaurant-place-search-message {
+  margin: 10px 0 0;
+  color: #d5b66b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.restaurant-place-search-results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  max-height: 155px;
+  margin-top: 10px;
+  overflow: auto;
+}
+
+.restaurant-place-search-results button {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+  padding: 9px 10px;
+  border: 1px solid #363b40;
+  border-radius: 4px;
+  background: #1a1d20;
+  color: #e9ecef;
+  text-align: left;
+  cursor: pointer;
+}
+
+.restaurant-place-search-results button:hover,
+.restaurant-place-search-results button.is-selected {
+  border-color: #c8b06e;
+  background: #242321;
+}
+
+.restaurant-place-search-results strong,
+.restaurant-place-search-results span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.restaurant-place-search-results strong {
+  font-size: 12px;
+}
+
+.restaurant-place-search-results span {
+  color: #aeb5bd;
+  font-size: 10px;
+}
+
 .restaurant-map-canvas > div:first-child:not(.restaurant-map-key-notice) {
   height: 100%;
 }
@@ -362,6 +457,19 @@
   .restaurant-map-canvas {
     height: 380px;
     min-height: 0;
+  }
+
+  .restaurant-place-search {
+    padding: 12px;
+  }
+
+  .restaurant-place-search-form button {
+    padding: 0 11px;
+  }
+
+  .restaurant-place-search-results {
+    grid-template-columns: 1fr;
+    max-height: 130px;
   }
 
   .restaurant-map-sidebar {

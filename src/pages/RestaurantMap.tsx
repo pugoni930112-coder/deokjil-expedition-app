@@ -21,6 +21,14 @@ type RestaurantMapProps = {
 }
 
 type PickedLocation = { latitude: number; longitude: number }
+type VworldPlace = {
+  id: string
+  title: string
+  category: string
+  address: string
+  latitude: number
+  longitude: number
+}
 
 declare global {
   interface Window {
@@ -56,10 +64,76 @@ function waitForVworldApi(): Promise<void> {
   })
 }
 
+function searchVworldPlaces(query: string): Promise<VworldPlace[]> {
+  return new Promise((resolve, reject) => {
+    const callbackName = `vworldSearch_${Date.now()}_${Math.random().toString(36).slice(2)}`
+    const callbackHost = window as unknown as Record<string, unknown>
+    const script = document.createElement('script')
+    const params = new URLSearchParams({
+      request: 'search',
+      type: 'PLACE',
+      apiKey,
+      query,
+      page: '1',
+      size: '10',
+      crs: 'EPSG:4326',
+      callback: callbackName,
+    })
+    let timeoutId = 0
+
+    const cleanup = () => {
+      window.clearTimeout(timeoutId)
+      script.remove()
+      delete callbackHost[callbackName]
+    }
+
+    callbackHost[callbackName] = (payload: any) => {
+      cleanup()
+      const response = payload?.response
+      if (response?.status !== 'OK') {
+        if (response?.status === 'NOT_FOUND') {
+          resolve([])
+          return
+        }
+        reject(new Error(response?.error?.text || '브이월드 장소 검색에 실패했어요.'))
+        return
+      }
+
+      const items = Array.isArray(response.result?.items) ? response.result.items : []
+      const places = items.flatMap((item: any, index: number) => {
+        const longitude = Number(item.point?.x)
+        const latitude = Number(item.point?.y)
+        if (!Number.isFinite(longitude) || !Number.isFinite(latitude)) return []
+        return [{
+          id: String(item.id || `${item.title}-${longitude}-${latitude}-${index}`),
+          title: String(item.title || '검색한 장소'),
+          category: String(item.category || '장소'),
+          address: String(item.address?.road || item.address?.parcel || ''),
+          latitude,
+          longitude,
+        }]
+      })
+      resolve(places)
+    }
+
+    script.onerror = () => {
+      cleanup()
+      reject(new Error('브이월드 검색 서버에 연결할 수 없어요. 잠시 후 다시 시도해 주세요.'))
+    }
+    script.src = `https://api.vworld.kr/req/search?${params.toString()}`
+    timeoutId = window.setTimeout(() => {
+      cleanup()
+      reject(new Error('장소 검색 응답이 늦어지고 있어요. 잠시 후 다시 시도해 주세요.'))
+    }, 15000)
+    document.body.appendChild(script)
+  })
+}
+
 function RestaurantMap({ userId, onRequireSignIn }: RestaurantMapProps) {
   const mapElement = useRef<HTMLDivElement>(null)
   const mapRef = useRef<any>(null)
   const vectorSourceRef = useRef<any>(null)
+  const searchVectorSourceRef = useRef<any>(null)
   const isPickingRef = useRef(false)
   const [restaurants, setRestaurants] = useState<FanRestaurant[]>([])
   const [selectedRestaurant, setSelectedRestaurant] = useState<FanRestaurant | null>(null)
@@ -72,6 +146,11 @@ function RestaurantMap({ userId, onRequireSignIn }: RestaurantMapProps) {
   const [mapError, setMapError] = useState('')
   const [error, setError] = useState('')
   const [searchText, setSearchText] = useState('')
+  const [placeQuery, setPlaceQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<VworldPlace[]>([])
+  const [selectedSearchPlace, setSelectedSearchPlace] = useState<VworldPlace | null>(null)
+  const [isSearchingPlaces, setIsSearchingPlaces] = useState(false)
+  const [placeSearchError, setPlaceSearchError] = useState('')
   const [form, setForm] = useState(emptyForm)
 
   const loadRestaurants = useCallback(async () => {
@@ -143,6 +222,11 @@ function RestaurantMap({ userId, onRequireSignIn }: RestaurantMapProps) {
         map.addLayer(markerLayer)
         vectorSourceRef.current = source
 
+        const searchSource = new ol.source.Vector()
+        const searchMarkerLayer = new ol.layer.Vector({ source: searchSource })
+        map.addLayer(searchMarkerLayer)
+        searchVectorSourceRef.current = searchSource
+
         map.on('click', (event: any) => {
           let hit = false
           map.forEachFeatureAtPixel(event.pixel, (feature: any) => {
@@ -180,6 +264,7 @@ function RestaurantMap({ userId, onRequireSignIn }: RestaurantMapProps) {
       if (map) map.setTarget(undefined)
       mapRef.current = null
       vectorSourceRef.current = null
+      searchVectorSourceRef.current = null
     }
   // restaurantsRef is used in the event handler so map setup does not need to restart for each fetch.
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -222,7 +307,70 @@ function RestaurantMap({ userId, onRequireSignIn }: RestaurantMapProps) {
       'EPSG:3857',
     )
     mapRef.current.getView().animate({ center, zoom: 15, duration: 350 })
-  }, [selectedRestaurant])
+  }, [selectedRestaurant, isMapReady])
+
+  useEffect(() => {
+    if (!selectedSearchPlace || !mapRef.current || !window.ol) return
+    const center = window.ol.proj.transform(
+      [selectedSearchPlace.longitude, selectedSearchPlace.latitude],
+      'EPSG:4326',
+      'EPSG:3857',
+    )
+    mapRef.current.getView().animate({ center, zoom: 16, duration: 500 })
+  }, [selectedSearchPlace, isMapReady])
+
+  useEffect(() => {
+    if (!searchVectorSourceRef.current || !window.ol) return
+    const source = searchVectorSourceRef.current
+    source.clear()
+    if (!selectedSearchPlace) return
+
+    const ol = window.ol
+    const feature = new ol.Feature({
+      geometry: new ol.geom.Point(
+        ol.proj.transform([selectedSearchPlace.longitude, selectedSearchPlace.latitude], 'EPSG:4326', 'EPSG:3857'),
+      ),
+    })
+    feature.setStyle(new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: 11,
+        fill: new ol.style.Fill({ color: '#edc86d' }),
+        stroke: new ol.style.Stroke({ color: '#161719', width: 3 }),
+      }),
+    }))
+    source.addFeature(feature)
+  }, [selectedSearchPlace, isMapReady])
+
+  const handlePlaceSearch = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const query = placeQuery.trim()
+    if (!query) {
+      setPlaceSearchError('찾을 음식점 이름이나 지역을 입력해 주세요.')
+      return
+    }
+    if (!apiKey) {
+      setPlaceSearchError('브이월드 인증키가 없어 장소를 검색할 수 없어요.')
+      return
+    }
+
+    setIsSearchingPlaces(true)
+    setPlaceSearchError('')
+    setSearchResults([])
+    setSelectedSearchPlace(null)
+    try {
+      const places = await searchVworldPlaces(query)
+      setSearchResults(places)
+      if (places.length > 0) {
+        setSelectedSearchPlace(places[0])
+      } else {
+        setPlaceSearchError('검색 결과가 없어요. 음식점 이름이나 지역명을 바꿔 검색해 주세요.')
+      }
+    } catch (searchError) {
+      setPlaceSearchError(searchError instanceof Error ? searchError.message : '장소 검색에 실패했어요.')
+    } finally {
+      setIsSearchingPlaces(false)
+    }
+  }
 
   const beginAddingRestaurant = () => {
     if (!userId) {
@@ -310,6 +458,35 @@ function RestaurantMap({ userId, onRequireSignIn }: RestaurantMapProps) {
 
       <div className="restaurant-map-layout">
         <div className="restaurant-map-main">
+          <div className="restaurant-place-search">
+            <form className="restaurant-place-search-form" onSubmit={handlePlaceSearch}>
+              <input
+                value={placeQuery}
+                onChange={(event) => setPlaceQuery(event.target.value)}
+                placeholder="음식점 이름이나 지역을 검색하세요"
+                aria-label="브이월드 음식점 및 장소 검색"
+              />
+              <button type="submit" disabled={isSearchingPlaces}>
+                {isSearchingPlaces ? '검색 중…' : '지도 검색'}
+              </button>
+            </form>
+            {placeSearchError && <p className="restaurant-place-search-message" role="status">{placeSearchError}</p>}
+            {searchResults.length > 0 && (
+              <div className="restaurant-place-search-results" aria-label="브이월드 검색 결과">
+                {searchResults.map((place) => (
+                  <button
+                    className={selectedSearchPlace?.id === place.id ? 'is-selected' : ''}
+                    type="button"
+                    key={place.id}
+                    onClick={() => setSelectedSearchPlace(place)}
+                  >
+                    <strong>{place.title}</strong>
+                    <span>{[place.category, place.address].filter(Boolean).join(' · ')}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           <div className={`restaurant-map-canvas${isPickingLocation ? ' is-picking' : ''}`} ref={mapElement} aria-label="브이월드 맛집 지도">
             {mapError && (
               <div className="restaurant-map-key-notice">
@@ -348,7 +525,7 @@ function RestaurantMap({ userId, onRequireSignIn }: RestaurantMapProps) {
             <div><span className="section-label">FAN PICKS</span><h2>팬 추천 장소</h2></div>
             <span>{filteredRestaurants.length}</span>
           </div>
-          <input className="restaurant-map-search" value={searchText} onChange={(event) => setSearchText(event.target.value)} placeholder="장소명이나 지역 검색" aria-label="맛집 검색" />
+          <input className="restaurant-map-search" value={searchText} onChange={(event) => setSearchText(event.target.value)} placeholder="등록된 팬 추천 장소 검색" aria-label="등록된 팬 추천 장소 검색" />
           {isLoading ? (
             <p className="restaurant-list-empty">장소를 불러오는 중이에요…</p>
           ) : filteredRestaurants.length === 0 ? (
