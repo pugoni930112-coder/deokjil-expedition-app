@@ -101,10 +101,12 @@ function App() {
             <Link to="/market/goods">굿즈 판매</Link>
           </nav>
 
-          <button className="login-button" onClick={handleAuthButtonClick}>
-            {session ? '로그아웃' : '로그인'}
-          </button>
-          {!session && <Link className="signup-link" to="/signup">회원가입</Link>}
+          <div className="header-actions">
+            <button className="login-button" onClick={handleAuthButtonClick}>
+              {session ? '로그아웃' : '로그인'}
+            </button>
+            {!session && <Link className="signup-link" to="/signup">회원가입</Link>}
+          </div>
         </header>
 
         {/* APP SCREENS */}

@@ -112,6 +112,13 @@ button {
   background: #ffffff;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
 /* HERO */
 .hero {
   min-height: 540px;
@@ -493,11 +500,12 @@ button {
 
   /* 상단 헤더 */
   .header {
+    height: auto;
     min-height: 65px;
     padding: 12px 5%;
     gap: 10px;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .logo {
@@ -523,6 +531,17 @@ button {
     scrollbar-width: none;
   }
 
+  .logo {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .header-actions {
+    grid-column: 2;
+    grid-row: 1;
+    gap: 7px;
+  }
+
   .nav::-webkit-scrollbar {
     display: none;
   }
@@ -533,14 +552,10 @@ button {
   }
 
   .login-button {
-    grid-column: 2;
-    grid-row: 1;
-    padding: 8px 15px;
+    padding: 8px 12px;
   }
 
   .signup-link {
-    grid-column: 3;
-    grid-row: 1;
     padding: 8px 12px;
     font-size: 12px;
   }
@@ -638,6 +653,29 @@ button {
 
 /* 작은 휴대폰 */
 @media (max-width: 380px) {
+  .header {
+    column-gap: 6px;
+  }
+
+  .logo {
+    font-size: 15px;
+  }
+
+  .logo-image {
+    width: 28px;
+    height: 28px;
+  }
+
+  .header-actions {
+    gap: 5px;
+  }
+
+  .login-button,
+  .signup-link {
+    padding: 7px 9px;
+    font-size: 11px;
+  }
+
   .hero h1 {
     font-size: 27px;
   }
