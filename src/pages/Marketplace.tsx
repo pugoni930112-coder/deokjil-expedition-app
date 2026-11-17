@@ -10,10 +10,10 @@ type MarketplacePost = {
   listing_type: ListingType
   artist_name: string
   item_name: string
-  desired_item: string | null
-  item_condition: ItemCondition
-  price_krw: number | null
-  description: string
+  desired_item?: string | null
+  item_condition?: ItemCondition
+  price_krw?: number | null
+  description?: string
   status: 'open' | 'reserved' | 'completed'
   created_at: string
 }
@@ -50,22 +50,31 @@ function Marketplace({ listingType, userId, onRequireSignIn }: MarketplaceProps)
     }
 
     setIsLoading(true)
-    const { data, error: loadError } = await getSupabaseClient()
-      .from('fan_marketplace_posts')
-      .select('id, listing_type, artist_name, item_name, desired_item, item_condition, price_krw, description, status, created_at')
-      .eq('listing_type', listingType)
-      .in('status', ['open', 'reserved'])
-      .order('created_at', { ascending: false })
+    const client = getSupabaseClient()
+    const response = userId
+      ? await client
+          .from('fan_marketplace_posts')
+          .select('id, listing_type, artist_name, item_name, desired_item, item_condition, price_krw, description, status, created_at')
+          .eq('listing_type', listingType)
+          .in('status', ['open', 'reserved'])
+          .order('created_at', { ascending: false })
+      : await client
+          .from('fan_marketplace_posts')
+          .select('id, listing_type, artist_name, item_name, status, created_at')
+          .eq('listing_type', listingType)
+          .in('status', ['open', 'reserved'])
+          .order('created_at', { ascending: false })
+    const { data, error: loadError } = response
 
     if (loadError) {
       setError(`게시글을 불러오지 못했어요: ${loadError.message}`)
       setPosts([])
     } else {
       setError('')
-      setPosts((data || []) as MarketplacePost[])
+      setPosts((data || []) as unknown as MarketplacePost[])
     }
     setIsLoading(false)
-  }, [listingType])
+  }, [listingType, userId])
 
   useEffect(() => {
     void loadPosts()
@@ -136,7 +145,7 @@ function Marketplace({ listingType, userId, onRequireSignIn }: MarketplaceProps)
 
       <div className="marketplace-toolbar">
         <button className="marketplace-create-button" type="button" onClick={handleCreateClick}>
-          + 글쓰기
+          {userId ? '+ 글쓰기' : '로그인 후 글쓰기'}
         </button>
       </div>
 
@@ -146,6 +155,12 @@ function Marketplace({ listingType, userId, onRequireSignIn }: MarketplaceProps)
         </p>
       )}
       {error && <p className="marketplace-error" role="alert">{error}</p>}
+
+      {posts.length > 0 && !userId && (
+        <p className="marketplace-access-note">
+          누구나 목록을 볼 수 있어요. 상세 내용과 거래 조건은 로그인한 회원만 확인할 수 있습니다.
+        </p>
+      )}
 
       {isLoading ? (
         <p className="marketplace-empty">게시글을 불러오는 중이에요…</p>
@@ -160,19 +175,31 @@ function Marketplace({ listingType, userId, onRequireSignIn }: MarketplaceProps)
           {posts.map((post) => (
             <article className="marketplace-card" key={post.id}>
               <div className="marketplace-card-topline">
-                <span className="marketplace-status">{post.status === 'reserved' ? '예약중' : '교환 가능'}</span>
+                <span className="marketplace-status">
+                  {post.status === 'reserved' ? '예약중' : post.status === 'completed' ? '거래 완료' : isExchange ? '교환 가능' : '판매 중'}
+                </span>
                 <time dateTime={post.created_at}>{new Date(post.created_at).toLocaleDateString('ko-KR')}</time>
               </div>
               <span className="marketplace-artist">{post.artist_name}</span>
               <h2>{post.item_name}</h2>
-              <p className="marketplace-condition">상태 · {post.item_condition}</p>
-              {isExchange ? (
-                <p className="marketplace-desired"><span>찾는 포카</span>{post.desired_item}</p>
+              {userId ? (
+                <>
+                  <p className="marketplace-condition">상태 · {post.item_condition}</p>
+                  {isExchange ? (
+                    <p className="marketplace-desired"><span>찾는 포카</span>{post.desired_item}</p>
+                  ) : (
+                    <p className="marketplace-price">{(post.price_krw || 0).toLocaleString('ko-KR')}원</p>
+                  )}
+                  {post.description && <p className="marketplace-description">{post.description}</p>}
+                  <p className="marketplace-contact-note">문의와 결제 기능은 준비 중이에요.</p>
+                </>
               ) : (
-                <p className="marketplace-price">{(post.price_krw || 0).toLocaleString('ko-KR')}원</p>
+                <div className="marketplace-locked-details">
+                  <span aria-hidden="true">🔒</span>
+                  <p>상세 내용은 회원 전용입니다.</p>
+                  <button type="button" onClick={onRequireSignIn}>로그인하고 글 보기</button>
+                </div>
               )}
-              {post.description && <p className="marketplace-description">{post.description}</p>}
-              <p className="marketplace-contact-note">문의와 결제 기능은 준비 중이에요.</p>
             </article>
           ))}
         </div>

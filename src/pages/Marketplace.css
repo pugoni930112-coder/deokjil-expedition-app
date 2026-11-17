@@ -65,6 +65,15 @@
   color: #ffb4b4;
 }
 
+.marketplace-access-note {
+  max-width: 1100px;
+  margin: 0 auto 18px;
+  color: #aeb5bd;
+  font-size: 12px;
+  line-height: 1.7;
+  text-align: right;
+}
+
 .marketplace-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -159,6 +168,41 @@
   border-top: 1px solid #303030;
   color: #777;
   font-size: 11px;
+}
+
+.marketplace-locked-details {
+  display: grid;
+  justify-items: start;
+  gap: 9px;
+  margin-top: 18px;
+  padding: 15px;
+  border: 1px solid #34383d;
+  border-radius: 5px;
+  background: #141618;
+}
+
+.marketplace-locked-details > span {
+  font-size: 17px;
+}
+
+.marketplace-locked-details p {
+  margin: 0;
+  color: #aeb5bd;
+  font-size: 12px;
+}
+
+.marketplace-locked-details button {
+  padding: 7px 11px;
+  border: 1px solid #666d74;
+  border-radius: 4px;
+  background: transparent;
+  color: #f1f2f3;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.marketplace-locked-details button:hover {
+  background: #24272b;
 }
 
 .marketplace-empty {
