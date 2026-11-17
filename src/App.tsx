@@ -1,9 +1,10 @@
 
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
 import type { Session } from '@supabase/supabase-js'
 import Home from './pages/Home'
 import Records from './pages/Records'
+import Marketplace from './pages/Marketplace'
 import AuthModal from './components/AuthModal'
 import { getSupabaseClient, isSupabaseConfigured } from './lib/supabase'
 import './App.css'
@@ -95,7 +96,8 @@ function App() {
             <Link to="/records">원정 기록</Link>
             <Link to="/map">맛집 지도</Link>
             <Link to="/community">정보 공유</Link>
-            <Link to="/archive">ARCHIVE</Link>
+            <Link to="/market/photocards">포카 교환</Link>
+            <Link to="/market/goods">굿즈 판매</Link>
           </nav>
 
           <button className="login-button" onClick={handleAuthButtonClick}>
@@ -139,14 +141,28 @@ function App() {
             />
 
             <Route
-              path="/archive"
+              path="/market/photocards"
               element={
-                <SubPage
-                  title="팬 아카이브"
-                  description="우리만의 사진과 추억을 모아두는 공간이에요."
+                <Marketplace
+                  listingType="photocard_exchange"
+                  userId={session?.user.id}
+                  onRequireSignIn={() => setIsAuthModalOpen(true)}
                 />
               }
             />
+
+            <Route
+              path="/market/goods"
+              element={
+                <Marketplace
+                  listingType="goods_sale"
+                  userId={session?.user.id}
+                  onRequireSignIn={() => setIsAuthModalOpen(true)}
+                />
+              }
+            />
+
+            <Route path="/archive" element={<Navigate to="/market/photocards" replace />} />
           </Routes>
         </main>
 

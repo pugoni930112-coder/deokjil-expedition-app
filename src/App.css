@@ -78,6 +78,10 @@ button {
   color: #ffffff;
 }
 
+.nav a.active {
+  color: #ffffff;
+}
+
 .login-button {
   padding: 10px 22px;
   color: #ffffff;
@@ -222,7 +226,7 @@ button {
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   margin-top: 55px;
   text-align: left;
@@ -477,6 +481,8 @@ button {
     min-height: 65px;
     padding: 12px 5%;
     gap: 10px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .logo {
@@ -490,15 +496,31 @@ button {
   }
 
   .nav {
-    order: 3;
-    width: 100%;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: auto;
+    min-width: 0;
     justify-content: flex-start;
-    gap: 20px;
+    gap: 18px;
     padding: 10px 0 4px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar {
+    display: none;
   }
 
   .nav a {
     font-size: 11px;
+    flex: 0 0 auto;
+  }
+
+  .login-button {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 8px 15px;
   }
 
   /* 메인 히어로 영역 */

@@ -1,5 +1,6 @@
 
 import '../App.css'
+import { Link } from 'react-router-dom'
 
 function Home() {
   return (
@@ -53,37 +54,45 @@ function Home() {
         <p>좋아하는 마음을 기록하고 함께 나누는 공간</p>
 
         <div className="menu-grid">
-          <a className="menu-card" href="#records">
+          <Link className="menu-card" to="/records">
             <span className="card-icon">▣</span>
             <span className="card-number">01</span>
             <h3>원정 기록</h3>
             <p>콘서트, 무대인사, 팝업스토어<br />우리의 소중한 순간들</p>
             <span className="card-arrow">↗</span>
-          </a>
+          </Link>
 
-          <a className="menu-card" href="#map">
+          <Link className="menu-card" to="/map">
             <span className="card-icon">⌖</span>
             <span className="card-number">02</span>
             <h3>도경수 맛집 지도</h3>
             <p>함께 가고 싶은 맛집과<br />덕질 코스를 찾아봐요</p>
             <span className="card-arrow">↗</span>
-          </a>
+          </Link>
 
-          <a className="menu-card" href="#community">
+          <Link className="menu-card" to="/community">
             <span className="card-icon">▱</span>
             <span className="card-number">03</span>
             <h3>정보 공유</h3>
             <p>팬들끼리 나누는 소식과<br />유용한 정보들</p>
             <span className="card-arrow">↗</span>
-          </a>
+          </Link>
 
-          <a className="menu-card" href="#archive">
-            <span className="card-icon">♡</span>
+          <Link className="menu-card" to="/market/photocards">
+            <span className="card-icon">▣</span>
             <span className="card-number">04</span>
-            <h3>팬 아카이브</h3>
-            <p>사진과 추억을 모아두는<br />우리만의 보물창고</p>
+            <h3>포카 교환</h3>
+            <p>찾는 포카와 보유한 포카를<br />서로 교환해요</p>
             <span className="card-arrow">↗</span>
-          </a>
+          </Link>
+
+          <Link className="menu-card" to="/market/goods">
+            <span className="card-icon">✧</span>
+            <span className="card-number">05</span>
+            <h3>굿즈 판매</h3>
+            <p>소장 굿즈를 소개하고<br />팬들과 거래해요</p>
+            <span className="card-arrow">↗</span>
+          </Link>
         </div>
       </section>
 

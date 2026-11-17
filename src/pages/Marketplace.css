@@ -1,0 +1,317 @@
+.marketplace-page {
+  min-height: 65vh;
+  padding: 72px 8% 90px;
+  background: radial-gradient(ellipse at 50% 0%, #202326 0%, #090909 48%);
+}
+
+.marketplace-heading {
+  max-width: 760px;
+  margin: 0 auto 42px;
+  text-align: center;
+}
+
+.marketplace-heading h1 {
+  margin: 18px 0 10px;
+  font-size: clamp(32px, 5vw, 48px);
+  letter-spacing: -1.5px;
+}
+
+.marketplace-heading p {
+  color: #aaa;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.marketplace-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  max-width: 1100px;
+  margin: 0 auto 24px;
+}
+
+.marketplace-tabs {
+  display: inline-flex;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid #333;
+  border-radius: 999px;
+  background: #141414;
+}
+
+.marketplace-tabs a {
+  padding: 10px 18px;
+  color: #aaa;
+  border-radius: 999px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.marketplace-tabs a.active {
+  color: #090909;
+  background: #e8e8e8;
+  font-weight: 700;
+}
+
+.marketplace-create-button {
+  padding: 11px 19px;
+  color: #090909;
+  background: #e8e8e8;
+  border: 0;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.marketplace-create-button:hover {
+  background: #fff;
+}
+
+.marketplace-connection-note,
+.marketplace-error {
+  max-width: 1100px;
+  margin: 0 auto 18px;
+  padding: 13px 16px;
+  border: 1px solid #51472c;
+  border-radius: 5px;
+  background: #201d15;
+  color: #e2d3a6;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.marketplace-error {
+  border-color: #713e3e;
+  background: #241717;
+  color: #ffb4b4;
+}
+
+.marketplace-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.marketplace-card {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid #333;
+  border-radius: 7px;
+  background: linear-gradient(145deg, #1b1c1e, #111);
+}
+
+.marketplace-card-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.marketplace-card-topline time {
+  color: #777;
+  font-size: 11px;
+}
+
+.marketplace-status {
+  padding: 5px 9px;
+  border: 1px solid #64696f;
+  border-radius: 999px;
+  color: #e2e5e9;
+  font-size: 10px;
+}
+
+.marketplace-artist {
+  color: #aeb5bd;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.marketplace-card h2 {
+  margin: 8px 0 10px;
+  font-size: 19px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.marketplace-condition {
+  margin-bottom: 18px;
+  color: #909090;
+  font-size: 12px;
+}
+
+.marketplace-desired,
+.marketplace-price {
+  margin: 0;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.marketplace-desired span {
+  display: block;
+  margin-bottom: 3px;
+  color: #999;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.marketplace-price {
+  color: #e0e4e8;
+  font-size: 20px;
+}
+
+.marketplace-description {
+  margin: 16px 0 0;
+  color: #aaa;
+  font-size: 12px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.marketplace-contact-note {
+  margin: 20px 0 0;
+  padding-top: 13px;
+  border-top: 1px solid #303030;
+  color: #777;
+  font-size: 11px;
+}
+
+.marketplace-empty {
+  max-width: 1100px;
+  min-height: 210px;
+  margin: 0 auto;
+  padding: 38px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #414141;
+  border-radius: 7px;
+  text-align: center;
+}
+
+.marketplace-empty > span {
+  margin-bottom: 12px;
+  color: #c7cbd0;
+  font-size: 32px;
+}
+
+.marketplace-empty h2 {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+
+.marketplace-empty p {
+  margin: 0;
+  color: #999;
+  font-size: 12px;
+}
+
+.marketplace-safety {
+  max-width: 1100px;
+  margin: 30px auto 0;
+  padding: 18px 20px;
+  border-left: 2px solid #8e939a;
+  background: #141414;
+}
+
+.marketplace-safety h2 {
+  margin: 0 0 7px;
+  font-size: 13px;
+}
+
+.marketplace-safety p,
+.marketplace-form-hint {
+  margin: 0;
+  color: #999;
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.marketplace-modal {
+  max-height: min(90vh, 900px);
+  overflow-y: auto;
+}
+
+.marketplace-modal form {
+  margin-top: 18px;
+}
+
+.marketplace-modal .record-modal-label {
+  margin-bottom: 14px;
+}
+
+.marketplace-form-hint {
+  margin: 3px 0 14px;
+  color: #d2c59f;
+}
+
+@media (max-width: 900px) {
+  .marketplace-page {
+    padding-right: 6%;
+    padding-left: 6%;
+  }
+
+  .marketplace-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .marketplace-page {
+    padding: 45px 5% 60px;
+  }
+
+  .marketplace-heading {
+    margin-bottom: 30px;
+  }
+
+  .marketplace-heading h1 {
+    font-size: 32px;
+  }
+
+  .marketplace-heading p {
+    font-size: 12px;
+  }
+
+  .marketplace-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .marketplace-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: 6px;
+  }
+
+  .marketplace-tabs a {
+    padding: 9px 7px;
+    text-align: center;
+  }
+
+  .marketplace-create-button {
+    min-height: 44px;
+  }
+
+  .marketplace-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .marketplace-card {
+    padding: 19px;
+  }
+
+  .marketplace-empty {
+    min-height: 190px;
+  }
+}
