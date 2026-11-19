@@ -182,6 +182,12 @@ function App() {
         {/* FOOTER */}
         <footer className="footer">
           <span>✦ 덕질 원정대</span>
+          <div className="footer-owner">
+            <strong>마로 <span>(MARO)</span></strong>
+            <a href="https://twitter.com/kssooni" target="_blank" rel="noreferrer" aria-label="마로의 트위터 프로필 @kssooni">
+              <span aria-hidden="true">𝕏</span> @kssooni
+            </a>
+          </div>
           <p>FAN-MADE COMMUNITY · NOT OFFICIALLY AFFILIATED</p>
         </footer>
 

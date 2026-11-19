@@ -342,11 +342,54 @@ button {
   font-weight: 700;
 }
 
+.footer-owner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 13px;
+  color: #d5d8dc;
+  font-size: 12px;
+}
+
+.footer-owner strong {
+  font-weight: 700;
+}
+
+.footer-owner strong span {
+  color: #92989f;
+  font-size: inherit;
+  font-weight: 500;
+}
+
+.footer-owner a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #aab0b7;
+  transition: color 0.2s;
+}
+
+.footer-owner a:hover {
+  color: #ffffff;
+}
+
+.footer-owner a span {
+  font-size: 13px;
+}
+
 .footer p {
   margin-top: 12px;
   color: #777777;
   font-size: 9px;
   letter-spacing: 2px;
+}
+
+@media (max-width: 420px) {
+  .footer-owner {
+    flex-wrap: wrap;
+    gap: 6px 10px;
+  }
 }
 
 /* TABLET */
